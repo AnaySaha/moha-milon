@@ -11,7 +11,7 @@ const Navbar = () => {
     <button className="join-item btn"><NavLink to="/">Home</NavLink></button>
       <button className="join-item btn"><NavLink to= "/login">Login</NavLink></button>
       <button className="join-item btn"><NavLink to= "/register">Register</NavLink></button>
-      
+      <li><NavLink to="/Oders">Oders</NavLink></li>
     
     </li>
     </>
