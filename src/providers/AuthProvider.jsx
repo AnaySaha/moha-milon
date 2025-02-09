@@ -1,10 +1,14 @@
-import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut } from 'firebase/auth';
 import React, { createContext, useEffect, useState } from 'react';
 import { auth } from '../firebase.init';
+import { GoogleAuthProvider } from 'firebase/auth/web-extension';
 export const AuthContext = createContext(null);
+
+const googleProvider = new GoogleAuthProvider();
 
 const AuthProvider = ({ children}) => {
     const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
     const name = 'potato alu mia' ;
 
     const createUser = (email, password) =>{
@@ -14,7 +18,12 @@ const AuthProvider = ({ children}) => {
     const signInUser = (email, password) =>{
         return signInWithEmailAndPassword(auth, email, password)
     }
+
+    const signWithGoogole = () =>{
+        return signInWithPopup(auth, googleProvider);
+    }
     const signOutUser = (email, password) =>{
+        setLoading(true);
         return signOut(auth);
     }
 
@@ -22,6 +31,7 @@ const AuthProvider = ({ children}) => {
       const unSubscribe =  onAuthStateChanged(auth,currentUser =>{
             console.log('current User', currentUser);
             setUser(currentUser);
+            setLoading(false);
         })
 
         return () =>{
@@ -44,8 +54,10 @@ const AuthProvider = ({ children}) => {
     const authInfo = {
         name,
         user,
+        loading,
         createUser,
         signInUser,
+        signWithGoogole,
         signOutUser
     }
     return (
